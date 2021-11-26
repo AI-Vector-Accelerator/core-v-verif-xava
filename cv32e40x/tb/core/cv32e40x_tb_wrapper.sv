@@ -81,6 +81,15 @@ module cv32e40x_tb_wrapper
 //          .pc_id_i            ( cv32e40x_core_i.pc_id                       )
 //      );
 
+
+    if_xif #(
+        .X_NUM_RS    ( 2  ),
+        .X_MEM_WIDTH ( 32 ),
+        .X_RFR_WIDTH ( 32 ),
+        .X_RFW_WIDTH ( 32 ),
+        .X_MISA      ( '0 )
+    ) ext_if();
+
     // instantiate the core
     cv32e40x_core #(
                  .NUM_MHPMCOUNTERS (NUM_MHPMCOUNTERS)
@@ -111,16 +120,33 @@ module cv32e40x_tb_wrapper
          .data_wdata_o           ( data_wdata            ),
          .data_rdata_i           ( data_rdata            ),
 
+         .xif_compressed_if   ( ext_if       ),
+         .xif_issue_if        ( ext_if       ),
+         .xif_commit_if       ( ext_if       ),
+         .xif_mem_if          ( ext_if       ),
+         .xif_mem_result_if   ( ext_if       ),
+         .xif_result_if       ( ext_if       ),
+
          // Interrupts verified in UVM environment
          .irq_i                  ( {32{1'b0}}            ),
-         .irq_ack_o              ( irq_ack               ),
-         .irq_id_o               ( irq_id_out            ),
+         //.irq_ack_o              ( irq_ack               ),
+         //.irq_id_o               ( irq_id_out            ),
 
          .debug_req_i            ( debug_req             ),
 
          .fetch_enable_i         ( fetch_enable_i        ),
          .core_sleep_o           ( core_sleep_o          )
        );
+    dummy_extension ext (
+        .clk_i          ( clk_i  ),
+        .rst_ni         ( rst_ni ),
+        .xif_compressed ( ext_if ),
+        .xif_issue      ( ext_if ),
+        .xif_commit     ( ext_if ),
+        .xif_mem        ( ext_if ),
+        .xif_mem_result ( ext_if ),
+        .xif_result     ( ext_if )
+    ); 
 
     // this handles read to RAM and memory mapped pseudo peripherals
     mm_ram
@@ -162,3 +188,32 @@ module cv32e40x_tb_wrapper
          .exit_value_o   ( exit_value_o                              ));
 
 endmodule // cv32e40x_tb_wrapper
+
+module dummy_extension (
+        input logic              clk_i,
+        input logic              rst_ni,
+
+        if_xif.coproc_compressed xif_compressed,
+        if_xif.coproc_issue      xif_issue,
+        if_xif.coproc_commit     xif_commit,
+        if_xif.coproc_mem        xif_mem,
+        if_xif.coproc_mem_result xif_mem_result,
+        if_xif.coproc_result     xif_result
+    );
+
+    assign xif_compressed.x_compressed_ready = '0;
+    assign xif_compressed.x_compressed_resp  = '0;
+    assign xif_issue.x_issue_ready           = '1;
+    assign xif_issue.x_issue_resp.accept     = '1;
+    assign xif_issue.x_issue_resp.writeback  = '1;
+    assign xif_issue.x_issue_resp.float      = '0;
+    assign xif_issue.x_issue_resp.dualwrite  = '0;
+    assign xif_issue.x_issue_resp.dualread   = '0;
+    assign xif_issue.x_issue_resp.loadstore  = '0;
+    assign xif_issue.x_issue_resp.exc        = '1;
+    assign xif_mem.x_mem_valid               = '0;
+    assign xif_mem.x_mem_req                 = '0;
+    assign xif_result.x_result_valid         = xif_result.x_result_ready;
+    assign xif_result.x_result               = '0;
+
+endmodule
