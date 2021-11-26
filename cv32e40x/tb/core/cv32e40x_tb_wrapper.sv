@@ -201,19 +201,19 @@ module dummy_extension (
         if_xif.coproc_result     xif_result
     );
 
-    assign xif_compressed.x_compressed_ready = '0;
-    assign xif_compressed.x_compressed_resp  = '0;
-    assign xif_issue.x_issue_ready           = '1;
-    assign xif_issue.x_issue_resp.accept     = '1;
-    assign xif_issue.x_issue_resp.writeback  = '1;
-    assign xif_issue.x_issue_resp.float      = '0;
-    assign xif_issue.x_issue_resp.dualwrite  = '0;
-    assign xif_issue.x_issue_resp.dualread   = '0;
-    assign xif_issue.x_issue_resp.loadstore  = '0;
-    assign xif_issue.x_issue_resp.exc        = '1;
-    assign xif_mem.x_mem_valid               = '0;
-    assign xif_mem.x_mem_req                 = '0;
-    assign xif_result.x_result_valid         = xif_result.x_result_ready;
-    assign xif_result.x_result               = '0;
+    assign xif_compressed.compressed_ready = '0;
+    assign xif_compressed.compressed_resp  = '0;
+    assign xif_issue.issue_ready           = '1;
+    assign xif_issue.issue_resp.accept     = '1;
+    assign xif_issue.issue_resp.writeback  = '1;
+    assign xif_issue.issue_resp.float      = '0;
+    assign xif_issue.issue_resp.dualwrite  = '0;
+    assign xif_issue.issue_resp.dualread   = '0;
+    assign xif_issue.issue_resp.loadstore  = '0;
+    assign xif_issue.issue_resp.exc        = '1;
+    assign xif_mem.mem_valid               = '0;
+    assign xif_mem.mem_req                 = '0;
+    assign xif_result.result_valid         = xif_result.result_ready;
+    assign xif_result.result               = '0;
 
 endmodule
