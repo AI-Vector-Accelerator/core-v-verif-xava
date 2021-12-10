@@ -26,16 +26,27 @@
 #include <errno.h>
 #include <machine/syscall.h>
 #include <assert.h>
-#include "corev_uvmt.h"
+// #include "corev_uvmt.h"
 #undef errno
 extern int errno;
 
+// Fix virtual peripheral addresses for verilator
+// by replacing this section with hard-coded
+// register address values below
+// 
+// /* write to this reg for outputting strings */
+// #define STDOUT_REG CV_VP_VIRTUAL_PRINTER_BASE
+// /* write test result of program to this reg */
+// #define RESULT_REG (CV_VP_STATUS_FLAGS_BASE)
+// /* write exit value of program to this reg */
+// #define EXIT_REG (CV_VP_STATUS_FLAGS_BASE + 4)
+
 /* write to this reg for outputting strings */
-#define STDOUT_REG CV_VP_VIRTUAL_PRINTER_BASE
+#define STDOUT_REG 0x10000000
 /* write test result of program to this reg */
-#define RESULT_REG (CV_VP_STATUS_FLAGS_BASE)
+#define RESULT_REG 0x20000000
 /* write exit value of program to this reg */
-#define EXIT_REG (CV_VP_STATUS_FLAGS_BASE + 4)
+#define EXIT_REG 0x20000004
 
 #define STDOUT_FILENO 1
 
