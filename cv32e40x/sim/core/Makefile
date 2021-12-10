@@ -141,8 +141,10 @@ ifneq (${WAVES}, 0)
 endif
 
 # xrun is the Cadence xcelium SystemVerilog simulator (https://cadence.com/)
-XRUN              = xrun
+XRUN              = xmverilog
+XRUN_GUI_FLAGS    = -gui -access r
 XRUN_FLAGS        = -clean -smartorder -sv -top worklib.tb_top -timescale 1ns/1ps +define+CV32E40X_APU_TRACE -uvmhome CDNS-1.2-ML
+XRUN_FLAGS        += $(XRUN_GUI_FLAGS)
 XRUN_DIR          = xcelium.d
 
 # verilator configuration
