@@ -448,7 +448,7 @@ xrun-all: $(CV_CORE_PKG) $(RTLSRC_PKG) $(RTLSRC) $(TBSRC_PKG) $(TBSRC)
 		$(TBSRC_PKG) $(TBSRC)
 
 .PHONY: xrun-hello-world
-xrun-hello-world: xrun-all $(VERI_CUSTOM)/hello-world/hello-world.hex
+xrun-hello-world:
 	$(XRUN) \
 		$(XRUN_FLAGS) \
 		-f $(CV_CORE_MANIFEST) \
