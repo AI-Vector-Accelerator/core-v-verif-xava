@@ -56,7 +56,7 @@ CV_CORE_UC     = $(shell echo $(CV_CORE) | tr a-z A-Z)
 VERI_CUSTOM = $(CORE_V_VERIF)/$(CV_CORE_LC)/tests/programs/custom
 
 CUSTOM_PROG  ?= requested_csr_por
-TEST         ?= hello-world
+TEST         ?= fibonacci
 
 # Common output directories
 SIM_RESULTS              = sim_results
@@ -219,8 +219,16 @@ export DESIGN_RTL_DIR = $(CV_CORE_PKG)/rtl
 # Default "custom test-program"
 CUSTOM_PROG  ?= requested_csr_por
 
+#RTL source files for AVA
+AVA_PKG             := $(CORE_V_VERIF)/core-v-cores/ava-core
+AVA_RTLSRC_INCDIR   := $(AVA_PKG)/rtl/accelerator_pkg.sv
+AVA_RTLSRC          := $(wildcard $(AVA_PKG)/rtl/*.sv))
+AVA_MANIFEST        := $(AVA_PKG)/rtl/accelerator_manifest.flist
+export AVA_RTL_DIR = $(AVA_PKG)/rtl
+
 # Shorthand rules for convience
 CV_CORE_pkg: clone_$(CV_CORE_LC)_rtl
+ava_pkg: $(AVA_PKG)
 
 tbsrc_pkg: $(TBSRC_PKG)
 
@@ -492,7 +500,7 @@ verilate: testbench_verilator
 sanity-veri-run:
 	make custom CUSTOM_PROG=hello-world
 
-testbench_verilator: CV_CORE_pkg $(TBSRC_VERI) $(TBSRC_PKG)
+testbench_verilator: CV_CORE_pkg $(AVA_PKG) $(TBSRC_VERI) $(TBSRC_PKG)
 	@echo "$(BANNER)"
 	@echo "* Compiling CORE TB and CV32E40X with Verilator"
 	@echo "$(BANNER)"
@@ -501,7 +509,7 @@ testbench_verilator: CV_CORE_pkg $(TBSRC_VERI) $(TBSRC_PKG)
 		--Wno-lint --Wno-UNOPTFLAT \
 		--Wno-MODDUP --top-module \
 		tb_top_verilator $(TBSRC_VERI) \
-		-f $(CV_CORE_MANIFEST) \
+		-f $(AVA_MANIFEST) -f $(CV_CORE_MANIFEST) \
 		$(CV_CORE_PKG)/bhv/$(CV_CORE_LC)_core_log.sv \
 		$(TBSRC_CORE)/tb_top_verilator.cpp --Mdir $(VERI_OBJ_DIR) \
 		-CFLAGS "-std=gnu++11 $(VERI_CFLAGS)" \
@@ -679,7 +687,14 @@ clone_$(CV_CORE_LC)_rtl:
 	$(CLONE_CV_CORE_CMD)
 
 
+###############################################################################
+# CV_CORE RTL dependencies
 
+clone_ava_rtl:
+	$(CLONE_AVA_CMD)
+
+$(AVA_PKG):
+	$(CLONE_AVA_CMD)
 
 ###############################################################################
 # general targets
