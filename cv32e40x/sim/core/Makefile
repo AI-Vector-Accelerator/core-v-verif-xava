@@ -716,7 +716,7 @@ clean_test_programs:
 
 
 .PHONY: clean clean_all distclean
-clean: clean-sim-results clean_test_programs questa-clean verilate-clean vcs-clean firmware-clean custom-clean dsim-clean xrun-clean vcs-clean clean-bsp riviera-clean
+clean: clean-sim-results clean_test_programs questa-clean verilate-clean vcs-clean firmware-clean dsim-clean xrun-clean vcs-clean riviera-clean
 
 distclean: clean
 	rm -rf riscv-fesvr riscv-isa-sim $(CV_CORE_PKG) work
