@@ -92,7 +92,8 @@ module cv32e40x_tb_wrapper
 
     // instantiate the core
     cv32e40x_core #(
-                 .NUM_MHPMCOUNTERS (NUM_MHPMCOUNTERS)
+                 .NUM_MHPMCOUNTERS (NUM_MHPMCOUNTERS),
+		 .X_EXT	           (1'B1)
                 )
     cv32e40x_core_i
         (
@@ -137,7 +138,31 @@ module cv32e40x_tb_wrapper
          .fetch_enable_i         ( fetch_enable_i        ),
          .core_sleep_o           ( core_sleep_o          )
        );
-    dummy_extension ext (
+    
+    //Dummy ext to test xif compilation
+    //dummy_extension ext (
+        //.clk_i          ( clk_i  ),
+        //.rst_ni         ( rst_ni ),
+        //.xif_compressed ( ext_if ),
+        //.xif_issue      ( ext_if ),
+        //.xif_commit     ( ext_if ),
+        //.xif_mem        ( ext_if ),
+        //.xif_mem_result ( ext_if ),
+        //.xif_result     ( ext_if )
+    //);
+
+   // Data read/write for Vector Unit
+    logic                vdata_gnt;
+    logic                vdata_rvalid;
+    logic                vdata_err;
+    logic [31:0]         vdata_rdata;
+    logic                vdata_req;
+    logic [31:0]         vdata_addr;
+    logic                vdata_we;
+    logic [3:0]          vdata_be;
+    logic [31:0]         vdata_wdata;
+
+   xava xava0 (
         .clk_i          ( clk_i  ),
         .rst_ni         ( rst_ni ),
         .xif_compressed ( ext_if ),
@@ -145,8 +170,19 @@ module cv32e40x_tb_wrapper
         .xif_commit     ( ext_if ),
         .xif_mem        ( ext_if ),
         .xif_mem_result ( ext_if ),
-        .xif_result     ( ext_if )
-    ); 
+        .xif_result     ( ext_if ),
+
+        .data_req_o       ( vdata_req          ),
+        .data_gnt_i       ( vdata_gnt          ),
+        .data_rvalid_i    ( vdata_rvalid       ),
+        .data_rdata_i     ( vdata_rdata        ),
+        .data_addr_o      ( vdata_addr         ),
+        .data_we_o        ( vdata_we           ),
+        .data_be_o        ( vdata_be           ),
+        .data_wdata_o     ( vdata_wdata        )
+
+    );
+
 
     // this handles read to RAM and memory mapped pseudo peripherals
     mm_ram

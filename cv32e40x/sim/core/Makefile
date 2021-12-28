@@ -47,7 +47,7 @@ MAKE_PATH     := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 COREV_PROJ     = cv32
 CORE_V_VERIF   = $(abspath $(MAKE_PATH)/../../..)
 DATE           = $(shell date +%F)
-WAVES          = 0
+WAVES          = 1
 
 CV_CORE       ?= CV32E40X
 CV_CORE_LC     = $(shell echo $(CV_CORE) | tr A-Z a-z)
