@@ -259,11 +259,11 @@ OVP_MODEL_DPI   = $(DV_OVPM_MODEL)/bin/Linux64/imperas_CV32.dpi.so
 #
 GNU_SW_TOOLCHAIN    ?= /opt/gnu
 GNU_VENDOR          ?= unknown
-GNU_MARCH           ?= rv32imc
+GNU_MARCH           ?= rv32imcv
 GNU_CC              ?= gcc
 COREV_SW_TOOLCHAIN  ?= /opt/corev
 COREV_VENDOR        ?= corev
-COREV_MARCH         ?= rv32imc
+COREV_MARCH         ?= rv32imcv
 COREV_CC            ?= gcc
 PULP_SW_TOOLCHAIN   ?= /opt/pulp
 PULP_VENDOR         ?= unknown
@@ -276,7 +276,7 @@ LLVM_CC             ?= cc
 
 CV_SW_TOOLCHAIN  ?= /opt/riscv
 CV_SW_VENDOR     ?= unknown
-CV_SW_MARCH      ?= rv32imc
+CV_SW_MARCH      ?= rv32imcv
 
 GNU_YES          = $(call IS_YES,$(GNU))
 PULP_YES         = $(call IS_YES,$(PULP))

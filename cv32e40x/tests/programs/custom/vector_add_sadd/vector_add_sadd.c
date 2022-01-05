@@ -33,8 +33,8 @@ int add_vv_test_e8_m1(void)
     asm volatile (
         "li t1, 64 \n\t"
         "vsetvli t0, t1, e8, m1 \n\t"
-        "vmv.v.i v1, 8 \n\t"
-        "vmv.v.i v2, 7 \n\t"
+        "vmv.v.i v1, 9 \n\t"
+        "vmv.v.i v2, 8 \n\t"
         "vadd.vv v3, v1, v2 \n\t"
         "vmv.x.s %0, v3"
         : "=r" (result) 
@@ -42,7 +42,7 @@ int add_vv_test_e8_m1(void)
 
     if(result != 15)
     {
-        printf("Fail: %d\n", result);
+        printf("Fail1: %d\n", result);
         return(1);
     }
     else
@@ -1146,10 +1146,12 @@ int main(void)
 {
     printf("Testing Vector Addition\n\n");
 
+
     int errors = 0;
 
     printf("vadd.vv\n");
     errors += add_vv_test_e8_m1();
+    return(EXIT_SUCCESS);
     errors += add_vv_test_e8_m2();
     errors += add_vv_test_e8_m4();
     errors += add_vv_test_e16_m1();

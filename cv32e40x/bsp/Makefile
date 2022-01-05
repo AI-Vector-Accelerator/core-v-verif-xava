@@ -4,11 +4,12 @@ RISCV_EXE_PREFIX ?= $(RISCV)/bin/riscv32-unknown-elf-
 RISCV_CC         ?= gcc
 RISCV_GCC = $(RISCV_EXE_PREFIX)$(RISCV_CC)
 RISCV_AR = $(RISCV_EXE_PREFIX)ar
-RISCV_MARCH ?= rv32imc
+RISCV_MARCH = rv32imcv
 SRC = crt0.S handlers.S syscalls.c vectors.S
 OBJ = crt0.o handlers.o syscalls.o vectors.o
 LIBCV-VERIF = libcv-verif.a
-CFLAGS ?= -Os -g -static -mabi=ilp32 -march=$(RISCV_MARCH) -Wall -pedantic $(RISCV_CFLAGS)
+CFLAGS ?= -Os -g -static -mabi=ilp32 -march=rv32imcv -Wall -pedantic $(RISCV_CFLAGS)
+#CFLAGS ?= -Os -g -static -mabi=ilp32 -march=$(RISCV_MARCH) -Wall -pedantic $(RISCV_CFLAGS)
 
 all: $(LIBCV-VERIF)
 

@@ -154,7 +154,6 @@ module cv32e40x_tb_wrapper
    // Data read/write for Vector Unit
     logic                vdata_gnt;
     logic                vdata_rvalid;
-    logic                vdata_err;
     logic [31:0]         vdata_rdata;
     logic                vdata_req;
     logic [31:0]         vdata_addr;
