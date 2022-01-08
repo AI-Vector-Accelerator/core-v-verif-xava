@@ -49,6 +49,34 @@ module cv32e40x_tb_wrapper
     logic [3:0]                   data_be;
     logic [31:0]                  data_rdata;
     logic [31:0]                  data_wdata;
+    
+    // Data crossbar slave 1
+    logic                         data_req_xbr_s1;
+    logic                         data_gnt_xbr_s1;
+    logic                         data_rvalid_xbr_s1;
+    logic [31:0]                  data_addr_xbr_s1;
+    logic                         data_we_xbr_s1;
+    logic [3:0]                   data_be_xbr_s1;
+    logic [31:0]                  data_rdata_xbr_s1;
+    logic [31:0]                  data_wdata_xbr_s1;
+    // Data crossbar master 1 (CPU)
+    logic                         data_req_xbr_m1;
+    logic                         data_gnt_xbr_m1;
+    logic                         data_rvalid_xbr_m1;
+    logic [31:0]                  data_addr_xbr_m1;
+    logic                         data_we_xbr_m1;
+    logic [3:0]                   data_be_xbr_m1;
+    logic [31:0]                  data_rdata_xbr_m1;
+    logic [31:0]                  data_wdata_xbr_m1;
+    // Data crossbar master 2 (NVPE)
+    logic                         data_req_xbr_m2;
+    logic                         data_gnt_xbr_m2;
+    logic                         data_rvalid_xbr_m2;
+    logic [31:0]                  data_addr_xbr_m2;
+    logic                         data_we_xbr_m2;
+    logic [3:0]                   data_be_xbr_m2;
+    logic [31:0]                  data_rdata_xbr_m2;
+    logic [31:0]                  data_wdata_xbr_m2;
 
     // signals to debug unit
     logic                         debug_req;
@@ -112,14 +140,23 @@ module cv32e40x_tb_wrapper
          .instr_addr_o           ( instr_addr            ),
          .instr_rdata_i          ( instr_rdata           ),
 
-         .data_req_o             ( data_req              ),
-         .data_gnt_i             ( data_gnt              ),
-         .data_rvalid_i          ( data_rvalid           ),
-         .data_we_o              ( data_we               ),
-         .data_be_o              ( data_be               ),
-         .data_addr_o            ( data_addr             ),
-         .data_wdata_o           ( data_wdata            ),
-         .data_rdata_i           ( data_rdata            ),
+         //.data_req_o             ( data_req              ),
+         //.data_gnt_i             ( data_gnt              ),
+         //.data_rvalid_i          ( data_rvalid           ),
+         //.data_we_o              ( data_we               ),
+         //.data_be_o              ( data_be               ),
+         //.data_addr_o            ( data_addr             ),
+         //.data_wdata_o           ( data_wdata            ),
+         //.data_rdata_i           ( data_rdata            ),
+
+	 .data_req_o             ( data_req_xbr_m1       ),
+         .data_gnt_i             ( data_gnt_xbr_m1       ),
+         .data_rvalid_i          ( data_rvalid_xbr_m1    ),
+         .data_we_o              ( data_we_xbr_m1        ),
+         .data_be_o              ( data_be_xbr_m1        ),
+         .data_addr_o            ( data_addr_xbr_m1      ),
+         .data_wdata_o           ( data_wdata_xbr_m1     ),
+         .data_rdata_i           ( data_rdata_xbr_m1     ),
 
          .xif_compressed_if   ( ext_if       ),
          .xif_issue_if        ( ext_if       ),
@@ -151,16 +188,6 @@ module cv32e40x_tb_wrapper
         //.xif_result     ( ext_if )
     //);
 
-   // Data read/write for Vector Unit
-    logic                vdata_gnt;
-    logic                vdata_rvalid;
-    logic [31:0]         vdata_rdata;
-    logic                vdata_req;
-    logic [31:0]         vdata_addr;
-    logic                vdata_we;
-    logic [3:0]          vdata_be;
-    logic [31:0]         vdata_wdata;
-
    xava xava0 (
         .clk_i          ( clk_i  ),
         .rst_ni         ( rst_ni ),
@@ -171,17 +198,47 @@ module cv32e40x_tb_wrapper
         .xif_mem_result ( ext_if ),
         .xif_result     ( ext_if ),
 
-        .data_req_o       ( vdata_req          ),
-        .data_gnt_i       ( vdata_gnt          ),
-        .data_rvalid_i    ( vdata_rvalid       ),
-        .data_rdata_i     ( vdata_rdata        ),
-        .data_addr_o      ( vdata_addr         ),
-        .data_we_o        ( vdata_we           ),
-        .data_be_o        ( vdata_be           ),
-        .data_wdata_o     ( vdata_wdata        )
+        .data_req_o(data_req_xbr_m2),
+        .data_gnt_i(data_gnt_xbr_m2),
+        .data_rvalid_i(data_rvalid_xbr_m2),
+        .data_we_o(data_we_xbr_m2),
+        .data_be_o(data_be_xbr_m2),
+        .data_addr_o(data_addr_xbr_m2),
+        .data_wdata_o(data_wdata_xbr_m2),
+        .data_rdata_i(data_rdata_xbr_m2)
 
     );
+    //port over obi mux
+     cv32e40n_data_xbar xbar_mux
+       (.clk_i                  ( clk_i                     ),
+        .rst_ni                 ( rst_ni                    ),
 
+        .data_req_xbr_s1_o      ( data_req_xbr_s1           ),
+        .data_gnt_xbr_s1_i      ( data_gnt_xbr_s1           ),
+        .data_rvalid_xbr_s1_i   ( data_rvalid_xbr_s1        ),
+        .data_addr_xbr_s1_o     ( data_addr_xbr_s1          ),
+        .data_we_xbr_s1_o       ( data_we_xbr_s1            ),
+        .data_be_xbr_s1_o       ( data_be_xbr_s1            ),
+        .data_rdata_xbr_s1_i    ( data_rdata_xbr_s1         ),
+        .data_wdata_xbr_s1_o    ( data_wdata_xbr_s1         ),
+
+        .data_req_xbr_m1_i      ( data_req_xbr_m1           ),
+        .data_gnt_xbr_m1_o      ( data_gnt_xbr_m1           ),
+        .data_rvalid_xbr_m1_o   ( data_rvalid_xbr_m1        ),
+        .data_addr_xbr_m1_i     ( data_addr_xbr_m1          ),
+        .data_we_xbr_m1_i       ( data_we_xbr_m1            ),
+        .data_be_xbr_m1_i       ( data_be_xbr_m1            ),
+        .data_rdata_xbr_m1_o    ( data_rdata_xbr_m1         ),
+        .data_wdata_xbr_m1_i    ( data_wdata_xbr_m1         ),
+
+        .data_req_xbr_m2_i      ( data_req_xbr_m2           ),
+        .data_gnt_xbr_m2_o      ( data_gnt_xbr_m2           ),
+        .data_rvalid_xbr_m2_o   ( data_rvalid_xbr_m2        ),
+        .data_addr_xbr_m2_i     ( data_addr_xbr_m2          ),
+        .data_we_xbr_m2_i       ( data_we_xbr_m2            ),
+        .data_be_xbr_m2_i       ( data_be_xbr_m2            ),
+        .data_rdata_xbr_m2_o    ( data_rdata_xbr_m2         ),
+        .data_wdata_xbr_m2_i    ( data_wdata_xbr_m2         ));
 
     // this handles read to RAM and memory mapped pseudo peripherals
     mm_ram
@@ -200,14 +257,23 @@ module cv32e40x_tb_wrapper
          .instr_rvalid_o ( instr_rvalid                              ),
          .instr_gnt_o    ( instr_gnt                                 ),
 
-         .data_req_i     ( data_req                                  ),
-         .data_addr_i    ( data_addr                                 ),
-         .data_we_i      ( data_we                                   ),
-         .data_be_i      ( data_be                                   ),
-         .data_wdata_i   ( data_wdata                                ),
-         .data_rdata_o   ( data_rdata                                ),
-         .data_rvalid_o  ( data_rvalid                               ),
-         .data_gnt_o     ( data_gnt                                  ),
+         //.data_req_i     ( data_req                                  ),
+         //.data_addr_i    ( data_addr                                 ),
+         //.data_we_i      ( data_we                                   ),
+         //.data_be_i      ( data_be                                   ),
+         //.data_wdata_i   ( data_wdata                                ),
+         //.data_rdata_o   ( data_rdata                                ),
+         //.data_rvalid_o  ( data_rvalid                               ),
+         //.data_gnt_o     ( data_gnt                                  ),
+
+         .data_req_i     ( data_req_xbr_s1                           ),
+         .data_addr_i    ( data_addr_xbr_s1                          ),
+         .data_we_i      ( data_we_xbr_s1                            ),
+         .data_be_i      ( data_be_xbr_s1                            ),
+         .data_wdata_i   ( data_wdata_xbr_s1                         ),
+         .data_rdata_o   ( data_rdata_xbr_s1                         ),
+         .data_rvalid_o  ( data_rvalid_xbr_s1                        ),
+         .data_gnt_o     ( data_gnt_xbr_s1                           ),
 
          .irq_id_i       ( irq_id_out                                ),
          .irq_ack_i      ( irq_ack                                   ),
@@ -223,6 +289,9 @@ module cv32e40x_tb_wrapper
          .exit_value_o   ( exit_value_o                              ));
 
 endmodule // cv32e40x_tb_wrapper
+
+
+
 
 module dummy_extension (
         input logic              clk_i,
