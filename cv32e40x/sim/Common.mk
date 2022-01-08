@@ -13,9 +13,9 @@
 
 export SHELL = /bin/bash
 
-CV_CORE_REPO   ?= git@git.soton.ac.uk:t33/cv32e40x.git
-CV_CORE_BRANCH ?= master
-CV_CORE_HASH   ?= 4d19d1d84a6a5aad95a67faa1e228c7e3ccc5fe9
+CV_CORE_REPO   ?= git@github.com:AI-Vector-Accelerator/cv32e40x.git
+CV_CORE_BRANCH ?= dev/issue_result
+CV_CORE_HASH   ?= none
 CV_CORE_TAG    ?= none
 
 RISCVDV_REPO    ?= https://github.com/google/riscv-dv
