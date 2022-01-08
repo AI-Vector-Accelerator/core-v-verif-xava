@@ -684,7 +684,7 @@ clone_$(CV_CORE_LC)_rtl:
 	@echo "$(BANNER)"
 	@echo "* Cloning CV32E40X RTL model"
 	@echo "$(BANNER)"
-	//$(CLONE_CV_CORE_CMD)
+	#$(CLONE_CV_CORE_CMD)
 
 
 ###############################################################################
