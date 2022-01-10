@@ -56,7 +56,21 @@ CV_CORE_UC     = $(shell echo $(CV_CORE) | tr a-z A-Z)
 VERI_CUSTOM = $(CORE_V_VERIF)/$(CV_CORE_LC)/tests/programs/custom
 
 CUSTOM_PROG  ?= requested_csr_por
-TEST         ?= vector_add_sadd
+TEST         ?= vector_vsetvli
+
+# AVA Vector tests:
+#
+# vector_add_sadd - DONE
+# vector_load_sload - DONE
+# vector_maxReduction - DONE
+# vector_min_max - DONE
+# vector_mul - DONE
+# vector_shift - DONE
+# vector_store - DONE
+# vector_sub - DONE
+# vector_sumReduction - DONE
+# vector_vmv - DONE
+# vector_vsetvli
 
 # Common output directories
 SIM_RESULTS              = sim_results
@@ -220,7 +234,7 @@ export DESIGN_RTL_DIR = $(CV_CORE_PKG)/rtl
 CUSTOM_PROG  ?= requested_csr_por
 
 #RTL source files for AVA
-AVA_PKG             := $(CORE_V_VERIF)/core-v-cores/ava-core
+AVA_PKG             := $(CORE_V_VERIF)/core-v-cores/x-ava-core
 AVA_RTLSRC_INCDIR   := $(AVA_PKG)/rtl/accelerator_pkg.sv
 AVA_RTLSRC          := $(wildcard $(AVA_PKG)/rtl/*.sv))
 AVA_MANIFEST        := $(AVA_PKG)/rtl/accelerator_manifest.flist
