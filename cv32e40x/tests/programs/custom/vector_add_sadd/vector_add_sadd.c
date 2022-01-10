@@ -1152,9 +1152,6 @@ int main(void)
 
     printf("vadd.vv\n");
     errors += add_vv_test_e8_m1();
-    asm volatile (vse.v v1, (%1));
-    asm volatile (vle.v v2, (%0));
-    return(EXIT_SUCCESS);
     errors += add_vv_test_e8_m2();
     errors += add_vv_test_e8_m4();
     errors += add_vv_test_e16_m1();
