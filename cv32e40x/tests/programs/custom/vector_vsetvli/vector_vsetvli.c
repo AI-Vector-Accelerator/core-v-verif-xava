@@ -176,7 +176,7 @@ int main(int argc, char *argv[])
 
 
 
-        // printf("Checking 8b\n");
+        //printf("Checking 8b\n");
         // new_vl = vsetvli_e8_m1(7);
         // if (!check_new_vl(7, 4, new_vl))
         //     return EXIT_FAILURE;
