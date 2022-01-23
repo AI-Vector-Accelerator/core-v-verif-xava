@@ -56,7 +56,7 @@ CV_CORE_UC     = $(shell echo $(CV_CORE) | tr a-z A-Z)
 VERI_CUSTOM = $(CORE_V_VERIF)/$(CV_CORE_LC)/tests/programs/custom
 
 CUSTOM_PROG  ?= requested_csr_por
-TEST         ?= vector_vsetvli
+TEST         ?= vector_add_sadd
 
 # AVA Vector tests:
 #

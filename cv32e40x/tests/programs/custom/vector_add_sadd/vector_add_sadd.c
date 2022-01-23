@@ -2,29 +2,29 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// void vector_test_grouped_add(int8_t N, int8_t* output, int8_t* vect1, int8_t* vect2)
-// {
-//     int t0 =0;
+ void vector_test_grouped_add(int8_t N, int8_t* output, int8_t* vect1, int8_t* vect2)
+ {
+     int t0 =0;
     
-//     printf("N: %d\tt0: %d\n", N, t0); 
-//     asm volatile (
-//         "vect_add: vsetvli %4, %3, e8, m1, d1 \n\t"
-//         "vle.v v1, (%1)\n\t"
-//         "   slli t5, %4, 2\n\t"
-//         "   sub %3, %3, %4\n\t"
-//         "   add %1, %1, t5\n\t"
-//         "vle.v v2, (%2)\n\t"
-//         "   add %2, %2, t5\n\t"
-//         "vadd.vv v3, v1, v2\n\t"
-//         "vse.v v3, (%0)\n\t"
-//         "   add %0, %0, t5\n\t"
-//         "bnez %3, vect_add\n\t"
+     printf("N: %d\tt0: %d\n", N, t0); 
+     asm volatile (
+         "vect_add: vsetvli %4, %3, e8, m1, d1 \n\t"
+         "vle.v v1, (%1)\n\t"
+         "   slli t5, %4, 2\n\t"
+         "   sub %3, %3, %4\n\t"
+         "   add %1, %1, t5\n\t"
+         "vle.v v2, (%2)\n\t"
+         "   add %2, %2, t5\n\t"
+         "vadd.vv v3, v1, v2\n\t"
+         "vse.v v3, (%0)\n\t"
+         "   add %0, %0, t5\n\t"
+         "bnez %3, vect_add\n\t"
 
-//         : "+r" (output), "+r" (vect1), "+r" (vect2), "+r" (N) 
-//         : "r" (t0), "m" (*vect1), "m" (*vect2)
-//     );
-//     printf("N: %d\tt0: %d\n", N, t0);
-// }
+         : "+r" (output), "+r" (vect1), "+r" (vect2), "+r" (N) 
+         : "r" (t0), "m" (*vect1), "m" (*vect2)
+     );
+     printf("N: %d\tt0: %d\n", N, t0);
+ }
 
 
 int add_vv_test_e8_m1(void)
@@ -1193,7 +1193,7 @@ int main(void)
     errors += sadd_vv_sat_test_e32_m1();
     errors += sadd_vv_sat_test_e32_m2();
     errors += sadd_vv_sat_test_e32_m4();
-    
+   
     if(errors > 0)
     {
         printf("\nErrors Detected!\nError Count: %d\n", errors);
